@@ -1,19 +1,28 @@
 import sys
 import ffmpeg
 
-#filepath = input('Enter input filename (including path)')
+filepath = input('Enter input filename (including path)')
 service = sys.argv[1]
 print(service)
-if service == 'gif':
-	gif_vid()
-elif service == 'flip':
-	flip_vid()
+
 
 def gif_vid():
-	print('giffing')
+	(
+		ffmpeg
+		.input(filepath)
+		.filter('fps', fps=15, round='up')
+		.output(filepath+'_gifd.gif', format='gif')
+	.run()
+	)
 
-def flip_vid():
+def hflip_vid():
 	stream = ffmpeg.input(filepath)
-	stream = ffmpeg.vflip(stream)
+	stream = ffmpeg.hflip(stream)
 	stream = ffmpeg.output(stream, 'output2.mp4')
 	ffmpeg.run(stream)
+
+
+if service == 'gif':
+	gif_vid()
+elif service == 'hflip':
+	hflip_vid()
